@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-xs-12">
+        <form id="form" class="form-proposta" action="Cliente/Proposta" method="post">
+            <div class="row">
+
+                <div class="col-md-4 col-md-offset-1">
+                    <div class="form-group"> 
+                        <label for="txtNomeCliente">
+                            Nome:
+                        </label>
+                        <input name="txtNomeCliente" data-input="false" id="txtNomeCliente" type="text" class="col-xs-12 form-control"/>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="txtEmail">
+                            Email:
+                        </label>
+                        <input name="txtEmail" id="txtEmail" type="email" data-input="false" class="col-xs-12 form-control"/>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="txTelefone1">
+                            Telefone 1:
+                        </label>
+                        <input name="txTelefone1" id="txtTelefone1" data-input="false" type="text" class="col-xs-12 form-control"/>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="txTelefone2">
+                            Telefone 2:
+                        </label>
+                        <input name="txTelefone2" id="txtTelefone2" data-input="false" type="text" class="col-xs-12 form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <div class="form-group"> 
+                        <label for="txTelefone2">
+                            Breve Descrição da Proposta:
+                        </label>
+                        <textarea id="txtProposta" name="txtProposta" data-input="false" class="form-control" rows="15" col="25">
+                        </textarea>
+                    </div> 
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-md-3 col-md-offset-5 col-xs-4 col-xs-offset-4">
+                    
+                    <input type="submit" class="btn btnPreenchido" id="btnConfirmar" value=" Enviar Proposta" />
+                       
+                </div>
+            </div>
+            <div id="msgErro" style="color:red; display:none;" class="row">
+                <div class="col-md-3 col-md-offset-5">
+                 Favor preencher todos os campos corretamente
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-xs-12" style="border:1px solid #2b5b87;">
+    </div>
+    <div class="col-xs-12">
+        <h4>
+            Contatos:
+        </h4>
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <h6>
+                    E-mail: contato@gullaciconsultoria.com.br
+                </h6>
+            </div>
+            <div class="col-xs-10 col-xs-offset-1">
+                <h6>
+                    Telefone: (11) 9-9718-8666
+                </h6>
+            </div>
+        </div>
+    </div>
+</div>

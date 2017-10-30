@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAOSolucaoTest
+ *
+ * @author Lucas Gullaci
+ */
+
+use PHPUnit_Framework_TestCase as PHPUnit;
+
+require_once '/../dao/DAO.class';
+require_once '/../app_data/Config.class';
+require_once '/../dao/DAOSolucao.class';
+require_once '/../transferobject/TransferObject.class';
+
+class DAOSolucaoTest extends PHPUnit {
+    //put your code here
+    
+    public function testeListarTipoSolucoes(){
+        
+        $dao = new DAOSolucao;
+        
+        $lista = $dao->listarTipoSolucoes();
+        
+        $temElemento = (count($lista) > 0);
+        
+        $this->assertEquals(true,$temElemento);
+    }
+    
+    public function testeListarSolucoes(){
+        
+        $dao = new DAOSolucao;
+        
+        $lista = $dao->listarSolucoes();
+        
+        $temElemento = (count($lista) > 0);
+        
+        $this->assertEquals(true,$temElemento);
+    }
+    
+     public function testeSelecionarSolucao(){
+        
+        $dao = new DAOSolucao;
+        
+        $to = $dao->selecionarSolucao(-1,'Ecommerce');
+        
+        $temElemento = (count($to->getAttr()) > 0);
+        
+        $this->assertEquals(true,$temElemento);
+    }
+}

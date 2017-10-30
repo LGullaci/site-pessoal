@@ -1,0 +1,21 @@
+Options All -Indexes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Some hosts may require you to use the `RewriteBase` directive.
+    # If you need to use the `RewriteBase` directive, it should be the
+    # absolute physical path to the directory that contains this htaccess file.
+    #
+    #RewriteBase MVCPHP/
+    
+    
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([a-zA-Z]*)$ index.php?url=$1
+    RewriteRule ^([a-zA-Z]*)/([a-zA-Z]*)$ index.php?url=$1/$2
+    RewriteRule ^([a-zA-Z]*)/([a-zA-Z]*)/([a-zA-Z0-9/]*)$ index.php?url=$1/$2/$3
+</IfModule>
+
+#RewriteEngine on 
+#RewriteRule ^(.*)$ - [F]

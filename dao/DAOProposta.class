@@ -1,0 +1,172 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAOProposta
+ *
+ * @author Lucas Gullaci
+ */
+class DAOProposta extends DAO {
+    
+     public function __construct(){
+        parent::__construct();
+    }
+    
+    public function cadastrarProposta($dadosProposta){
+        $params = array("tipo" => $this->typValueBD($dadosProposta));
+        $params[] = $dadosProposta;
+        
+        $query = "call procPropostaCadastrar(?)";
+        
+        $validado = false;
+        try{
+            
+            $result = $this->executerQueryResult($query, $params);
+            
+            if($result !== false){
+                
+                if($row = $result->fetch_array(MYSQL_ASSOC)) {
+                    
+                    $retornoQuery = json_decode($row["retorno"],true);
+                    
+                    $validado = ($retornoQuery["resultCode"] == 0);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function alterarProposta($dadosProposta){
+        $params = array("tipo" => $this->typValueBD($dadosProposta));
+        $params[] = $dadosProposta;
+        
+        $query = "call procPropostaCadastrar(?)";
+        
+        $validado = false;
+        try{
+            
+            $result = $this->executerQueryResult($query, $params);
+            
+            if($result !== false){
+                
+                if($row = $result->fetch_array(MYSQL_ASSOC)) {
+                    
+                    $retornoQuery = json_decode($row["retorno"],true);
+                    
+                    $validado = ($retornoQuery["resultCode"] == 0);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function selecionarProposta($idProposta){
+        $to = new TransferObject();
+        
+        $params = array("tipo" => typeValueBD($idProposta));
+        $params[] = $idProposta;
+        
+        $query = "call procPropostaSelecionar(?,?);";
+        
+        try {
+            
+            $result = $this->executerQueryResult($query,$params);
+            
+            if($result !== false) {
+                
+                if($row = $result->fetch_array(MYSQLI_ASSOC)){
+                    
+                    $to->idProposta = $row["idProposta"];
+                    $to->status = $row["idStatus"];
+                    $to->idCliente = $row["idCliente"];
+                    $to->valorProposta = $row["vlrProposta"];
+                    $to->arquivo = $row["arquivo"];
+                    $to->orcamentoLivre = $row["fgOrcamentoLivre"];
+                    $to->tipoAvalicao = $row["idTipoAvalicao"];
+                    $to->proposta = $row["strProposta"];
+                    $to->idSolucao = $row["idSolucao"];
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $to;
+    }
+    
+    public function listarPropostas($cpfCliente = -1){
+        $params = array("tipo" => typeValueBD($cpfCliente));
+        $params[] = $cpfCliente;
+        
+        $query = "call procListarPropostas(?,?);";
+        
+        try{
+            
+            $result = $this->executerQuery($query,$params);
+            
+            if($result !== false){
+            
+                return $result;
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+    
+    public function listarStatusProposta(){
+        
+        $query = 'select * from status_proposta where fgAtivo = 1';
+        
+        try{
+            
+            $result =$this->executerQuery($query);
+            
+            if($result !== false){
+            
+                return $result;
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+    
+    public function listarTipoAvaliacao(){
+        
+        $query = 'select * from tipo_avaliacao where fgAtivo = 1';
+        
+        try{
+            
+            $result =$this->executerQuery($query);
+            
+            if($result !== false){
+            
+                return $result;
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+}

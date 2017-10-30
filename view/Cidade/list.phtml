@@ -1,0 +1,17 @@
+<?php 
+   
+    $view = $_SESSION["View"];
+    
+    $linhas = array();
+    for($i = 0; $i < count($view->listaCidades); $i++){
+    
+       $linhas[] = "
+        <tr>
+            <td> {$view->listaCidades[$i]->nome} </td>
+            <td> " . View::ActionLink("alterar","Cidade","Edit",array($view->listaCidades[$i]->id))." </td>
+        </tr>";
+    
+    }
+
+   echo Bootstrap::Table("table table-striped","table_cidades",$linhas,array("Cidade","Ação"));
+?>

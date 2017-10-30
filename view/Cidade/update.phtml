@@ -1,0 +1,16 @@
+<?php 
+    $view = $_SESSION["View"];
+?>
+
+<form action ="?url=Cidade/Edit/<?php echo $view->dadosCidade->id ?>" method="post">
+    Nome Cidade: <input type="text" name="Nome" value="<?php echo $view->dadosCidade->nome ?>">
+    
+    <input type="submit" value="Inserir"/>
+</form>
+
+<?php 
+
+    
+    echo $view->MensagemAlteracao;
+
+?>

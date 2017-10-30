@@ -1,0 +1,13 @@
+  {
+    "name": "Gullaci Consultoria",
+    "description": "",
+    "authors": [
+        {
+            "name": "Lucas Gullaci",
+            "email": "lucas.gullaci@gullaciconsultoria.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=7.*"
+    }
+}

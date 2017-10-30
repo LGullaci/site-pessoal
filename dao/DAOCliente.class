@@ -1,0 +1,188 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+/**
+ * Description of ClienteDAO
+ *
+ * @author Lucas
+ */
+class DAOCliente extends DAO {
+    //put your code here
+    
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    public function inserirCliente($dadosCliente) {
+        $result;
+        $validaInsercao = false;
+        try {
+            $params = array("tipos" => "".$this->typeValueBD($dadosCliente));
+            $params[] = $dadosCliente;
+            $query = "call procClienteCadastrar(?)";
+            
+            $result = $this->executerQueryResult($query,$params);
+            
+            var_dump($this->error);
+            
+            if($result !== false)
+            {
+           
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $retornoQuery = json_decode($row['retorno'],true);
+                  $result->close();
+                $validaInsercao = ($retornoQuery["resultCode"] == 0);
+            }else
+            {
+                $validaInsercao = false;
+            }
+            
+        }catch(Exception $e) {
+            $this->error = $e->getMessage();
+            $validaInsercao = false;
+        }finally {
+            // $result->close();
+             //$this->closeConnection();
+        }
+        
+        return $validaInsercao;
+    }
+    
+    public function alterarCliente($dadosCliente) {
+          $result;
+        $validaInsercao = false;
+        try {
+            $params = array("tipos" => "".$this->typeValueBD($dadosCliente));
+            $params[] = $dadosCliente;
+            $query = "call procClienteAlterar(?)";
+            
+            $result = $this->executerQueryResult($query,$params);
+            var_dump($this->error);
+            if($result !== false)
+            {
+           
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $retornoQuery = json_decode($row['retorno'],true);
+                 $result->close();
+                $validaInsercao = ($retornoQuery["resultCode"] == 0);
+            }else
+            {
+                $validaInsercao = false;
+            }
+            
+        }catch(Exception $e) {
+            $this->error = $e->getMessage();
+            $validaInsercao = false;
+        }finally {
+            // $result->close();
+             //$this->closeConnection();
+        }
+        
+        return $validaInsercao;
+    }
+    
+    public function selecionarCliente($idCliente) {
+        $dadosCliente = new TransferObject();
+         $result = '';
+        
+        try {
+            $params = array("tipos" => "".$this->typeValueBD($idCliente));
+            $params[] = $idCliente;
+            $query = 'call procClienteSelecionar(?);';
+            $result = $this->executerQueryResult($query,$params);
+             var_dump($this->error);
+            if($result !== false)
+            {
+                if($row = $result->fetch_array(MYSQLI_ASSOC))
+                {
+                    
+                    $dadosCliente->idCliente = $row["idCliente"];
+                    $dadosCliente->nomeCompleto = $row["strNomeCompleto"];
+                    $dadosCliente->cpf = $row["strCpf"];
+                    $dadosCliente->cnpj = $row["strCnpj"];
+
+                    $dadosContato = new TransferObject();
+
+                    $dadosContato->email = $row["strEmail"];
+                    $dadosContato->telefone1 = $row["strTelefone1"];
+                    $dadosContato->telefone2 = $row["strTelefone2"];
+
+                    $dadosCliente->contato = $dadosContato;
+                }
+            }
+        } catch (Exception $ex) {
+            
+            $this->error = $ex->getMessage();
+        }finally {
+           // $result->close();
+            //$this->closeConnection();
+        }
+        
+        return $dadosCliente;
+    }
+    
+    
+    public function verficarCliente($filtro){
+        
+        $f = $filtro["filtro"];
+        
+        $query = "select distinct 1 as existe from cliente where {$f} = ?";
+        $result;
+        try {
+            $params = array("tipos" => "".$this->typeValueBD($filtro[$f]));
+            $params[] = $filtro[$f];
+            $result = $this->executerQueryResult($query,$params)->fetch_array(MYSQLI_ASSOC);
+            
+            return ($result["existe"] == "1");
+        } 
+        catch (Exception $exc) {
+            
+        }finally {
+             //$result->close();
+             $this->closeConnection();
+        }
+        
+        
+    }
+    
+    public function listarClientes($nomeCliente = '', $razaoSocial = '',$cpf = '', $email = ''){
+        
+        $tipos = $this->typeValueBD($nomeCliente);
+        $tipos .= $this->typeValueBD($razaoSocial);
+        $tipos .= $this->typeValueBD($cpf);
+        $tipos .= $this->typeValueBD($email);
+        
+        $params = array("tipos" => $tipos);
+        
+        $params[] = $nomeCliente;
+        $params[] = $razaoSocial;
+        $params[] = $cpf;
+        $params[] = $email;
+        
+        $query = "call procListaClientes(?,?,?,?);";
+
+        $clientes;
+         $result = null;
+        try{
+            
+           $clientes = $this->executerResultQuery($query,$params);
+            
+        } catch (Exception $ex) {
+            $clientes = $ex->getMessage();
+        }finally {
+            //$result->close();
+             $this->closeConnection();
+        }
+        
+        return $clientes;
+        
+    }
+}

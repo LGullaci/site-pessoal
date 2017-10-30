@@ -1,0 +1,84 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAOSolucao
+ *
+ * @author Lucas Gullaci
+ */
+class DAOSolucao {
+    //put your code here
+    
+    public function listarSolucoes() {
+        
+        try
+        {
+            $result = $this->executerQueryResult('select * from solucao where fgAtivo = 1;');
+            
+            if($result !== false){
+                
+                return $result;
+            }
+                
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+        
+    }
+    
+    public function selecionarSolucao($idSolucao = 1, $descricao = '') {
+        
+        $to = new TransferObject;
+        
+        $params = array("tipo" => typeValueBD($idSolucao));
+        $params["tipo"] .= typeValueBD($descricao);
+        $params[] = $idSolucao;
+        $params[] = $descricao;
+        
+        $query = "select s.*, st.strDescricaoTipoSolucao from solucao s inner join solucao_tipo st on st.idTipo = s.idTipo where s.fgAtivo = 1 and (idSolucao = ? or strDescricao = ?)";
+        
+        try {
+            
+            $result = $this->executerQueryResult($query,$params);
+            
+            if($result !== false) {
+                
+                if($row = $result->fetch_array(MYSQLI_ASSOC)) {
+                    
+                    $to->idSolucao = $row["idSolucao"];
+                    $to->tipo = $row["idTipo"];
+                    $to->valorMinimo = $row["vlrMinimo"];
+                    $to->ativo = $row["fgAtivo"];
+                    $to->linkBase = $row["strLinkDataBase"];
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex;
+        }
+    }
+    
+    public function listarTipoSolucao() {
+         try
+        {
+            $result = $this->executerQueryResult('select * from tipo_solucao');
+            
+            if($result !== false){
+                
+                return $result;
+            }
+                
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+}

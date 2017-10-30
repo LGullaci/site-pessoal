@@ -1,0 +1,155 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAOOrcamento
+ *
+ * @author Lucas Gullaci
+ */
+class DAOOrcamento extends DAO{
+    
+    public function __construct(){
+        parent::__construct();
+    }
+    
+    public function cadastrarOrcamento($dadosOrcamento){
+        
+        $params = array("tipo" => $this->typValueBD($dadosOrcamento));
+        $params[] = $dadosOrcamento;
+        
+        $query = "call procOrcamentoCadastrar(?)";
+        
+        $validado = false;
+        try{
+            
+            $result = $this->executerQueryResult($query, $params);
+            
+            if($result !== false){
+                
+                if($row = $result->fetch_array(MYSQL_ASSOC)) {
+                    
+                    $retornoQuery = json_decode($row["retorno"],true);
+                    
+                    $validado = ($retornoQuery["resultCode"] == 0);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function alterarOrcamento($dadosOrcamento){
+         $params = array("tipo" => $this->typValueBD($dadosOrcamento));
+        $params[] = $dadosOrcamento;
+        
+        $query = "call procOrcamentoAlterar(?)";
+        
+        $validado = false;
+        try{
+            
+            $result = $this->executerQueryResult($query, $params);
+            
+            if($result !== false){
+                
+                if($row = $result->fetch_array(MYSQL_ASSOC)) {
+                    
+                    $retornoQuery = json_decode($row["retorno"],true);
+                    
+                    $validado = ($retornoQuery["resultCode"] == 0);
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function selecionarOrcamento($idOrcamento = -1, $idProposta = -1){
+        
+        $to = new TransferObject();
+        
+        $params = array("tipo" => typeValueBD($idOrcamento));
+        $params["tipo"] .= typeValueBD($idProposta);
+        $params[] = $idOrcamento;
+        $params[] = $idProposta;
+        
+        $query = "call procOrcamentoSelecionar(?,?);";
+        
+        try {
+            
+            $result = $this->executerQueryResult($query,$params);
+            
+            if($result !== false) {
+                
+                if($row = $result->fetch_array(MYSQLI_ASSOC)){
+                    
+                    $to->idOrcamento = $row["idOrcamento"];
+                    $to->status = $row["idStatus"];
+                    $to->idProposta = $row["idProposta"];
+                    $to->vlrOrcamento = $row["vlrOrcamento"];
+                    $to->arquivo = $row["arquivo"];
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return $to;
+    }
+    
+    public function listarOrcamentos($idProposta = -1, $cpfCliente = ''){
+        
+        $params = array("tipo" => typeValueBD($idProposta));
+        $params["tipo"] .= typeValueBD($cpfCliente);
+        $params[] = $idProposta;
+        $params[] = $cpfCliente;
+        
+        $query = "call procListarOrcamentos(?,?);";
+        
+        try{
+            
+            $result = $this->executerQuery($query,$params);
+            
+            if($result !== false){
+            
+                return $result->fecth_array(MYSQLI_ASSOC);
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+    
+    public function listarStatusOrcamento(){
+        
+        $query = 'select * from status_orcamento where fgAtivo = 1';
+        
+        try{
+            
+            $result =$this->executerQuery($query);
+            
+            if($result !== false){
+            
+                return $result->fecth_array(MYSQLI_ASSOC);
+            }
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+        }
+        
+        return null;
+    }
+}

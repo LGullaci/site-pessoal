@@ -1,0 +1,17 @@
+{
+    "connection_string":{
+        "servidor":"127.0.0.1",
+        "banco":"gullaciconsultoria",
+        "usuario":"root",
+        "senha":"nkr5vdyi"
+    },
+    "error_page":"",
+    "smtp_port":"587",
+    "smtp_user":"contato@gullaciconsultoria.com.br",
+    "smtp_senha":"nkr5vdyi",
+    "smtp_server":"smtp.gullaciconsultoria.com.br",
+    
+    "root_document":"/gullaciconsultoria/",
+    "controller_default":"Home",
+    "email_proposta":"lucas.gullaci@gullaciconsultoria.com.br"
+}

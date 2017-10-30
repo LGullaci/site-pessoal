@@ -1,0 +1,248 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14/04/2016, 20:38:41
+    Author     : Lucas Gullaci
+*/
+
+body{
+    
+    overflow-x: hidden;
+    background-color: #F7F7F7;
+
+}
+
+.navbar-transparent{
+    background-color: transparent !important; 
+    border:0;
+    opacity:1;
+    position: absolute;
+}
+
+.navbar-fill {
+    background-color: #FcFcFc !important; 
+    border:1px solid #FcFcFc;
+    color:#333 !important;
+    opacity:0.8     ;
+    position: fixed;
+}
+.navbar-fill li  a, .navbar-fill .navbar-brand a{
+
+    color:#5080ac !important;
+}
+
+.navbar-fill .navbar-toggle{
+    border:1px solid #2b5b87;
+}
+
+.navbar-fill .navbar-toggle .icon-bar{
+    background-color:#2b5b87 !important;
+}
+
+.slide-top{
+    padding:0 !important;
+    height:550px;
+
+}
+
+.slide-top .carousel{
+    
+    height:inherit;
+}
+
+.carousel img{
+    width: 100%;
+    height:550px !important
+}
+
+.img-thumbnail{
+    border-color:#F7F7F7;
+    background-color:#F7F7F7;
+}
+.img-responsive{
+    height: 100% !important;
+}
+
+.container-fluid{
+    margin:0;
+    padding-left:0;
+
+}
+
+.cabecalho{
+    margin:0;
+    border-radius: 0 !important;
+    transition:background-color 0.3s linear , border 0.3s linear, opacity 0.3s linear;
+    top:0;
+    z-index: 999;
+    width: 100%;
+    
+}
+
+.container{
+    padding-top: 70px;
+}
+
+.cabecalho ~ .container{
+    padding-top: 70px;
+}
+
+.cabecalho{
+
+}
+
+.cabecalho,  .cabecalho a{
+    color:#FFF !important;
+    
+}
+.thumbnail{
+ border-color:#5080ac;
+    background-color:#F7F7F7;  
+}
+.thumbnail .caption{
+    color:#5080ac;
+}
+.cabecalho .navbar-nav > li > a {
+   
+    transition:color 0.3s linear;
+     text-decoration: none;
+    font-weight: 600;
+}
+
+.navbar-transparent li  a, .navbar-transparent .navbar-brand a{
+
+    color:#fff !important;
+}
+
+.cabecalho .navbar-nav li, .navbar-brand {
+    transition: opacity 0.2s linear;
+    
+}
+.cabecalho .navbar-nav li:hover, .navbar-brand:hover {
+    opacity: 0.3;
+}
+.cabecalho .navbar-nav > .active > a, .cabecalho > .navbar-nav > .active > a:hover, .cabecalho > .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color:transparent;
+}
+
+.cabecalho  .navbar-brand{
+     color: #ffffff !important; 
+}
+
+.cabecalho .navbar-toggle .icon-bar{
+     background-color: #FFF;
+     
+}
+
+.cabecalho .navbar-toggle:hover{
+     background-color: #FFF;
+     border:0 !important;
+}
+
+.nav-tabs > li.active > a,.nav-tabs > li.active > a:active , .tab-content > div.active {
+/*    color:#FFF !important;
+    background-color:#073763 !important;
+    text-decoration: none;*/
+    outline:0;
+}
+
+.tab-content > div.tab-pane{
+    height:400px;
+    padding:5%;
+    text-align: justify;
+    
+    
+}
+
+.identacao{
+    text-indent: 0.7cm;
+}
+
+a:hover{
+    text-decoration: none;
+    
+    
+}
+a:visited{
+    outline: 0 !important;
+    text-decoration: none !important;
+}
+*{
+    font-family: Georgia, Arial, sans-serif;
+    font-size:12pt;
+    color:#2b5b87 ;
+}
+
+.form-proposta  .row:nth-child(1) .form-group{
+    margin-bottom: 20% !important;
+}
+
+.form-proposta {
+    
+    margin-top: 15px;
+    
+}
+
+.form-proposta input, .form-proposta textarea {
+    
+     border:1px solid #5080ac ;
+    
+}
+
+.form-control:invalid{
+    border:2px solid red;
+}
+
+
+.btnPreenchido:hover{
+    background-color:#2b5b87 !important;
+    border:0px solid #2b5b87;
+    color:#F7F7F7 !important;
+}
+
+.btnPreenchido{
+    background-color:transparent !important;
+    border:1px solid #2b5b87 !important;
+    color:#2b5b87 !important;
+}
+.rodape{
+    bottom:0;
+    margin-top: 30%;
+    border-top: 1px solid #ececec;
+    background-color:#073763;
+    height: 100px;
+    position: static !important;
+    padding-bottom: 100px;
+}
+
+.panel-custom{
+    border:1px solid #5080ac !important;
+}
+
+.panel-custom .panel-heading{
+    background-color:#2b5b87 !important;
+    color:#F7F7F7 !important;
+}
+
+.list{
+    list-style: none;
+}
+.list li{
+    display: inline;
+    width: 20%;
+}
+
+.circle-buttom{
+    width:80%; 
+    padding:20%; 
+    height:130px; 
+    border:1px solid #2b5b87; 
+    background-repeat: no-repeat;;
+    border-radius:70px;
+    border-color: 1px solid #2b5b87;
+    background-color:transparent; 
+}

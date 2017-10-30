@@ -1,0 +1,189 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAO
+ *
+ * @author Lucas
+ */
+
+abstract class TypeQuery
+{
+    static $StoreProcedure = 1;
+    static $SimpleQuery = 2;
+}
+
+
+class DAO {
+    //put your code here
+    
+    
+    private static $con;
+    
+    private $attr = array();
+    
+    public function __construct()
+    {
+        
+    }
+    
+     public function __get($name) {
+         
+        if(array_key_exists($name,$this->attr))
+            return $this->attr[$name];
+       return null;
+    }
+    
+    public function __set($name, $value) {
+        
+        $this->attr[$name] = $value;
+    }
+    
+    protected function newConnection()
+    {
+        $config = Config::GetInstance(); 
+      
+        self::$con = new mysqli($config->preferences["connection_string"]["servidor"], $config->preferences["connection_string"]["usuario"], $config->preferences["connection_string"]["senha"]);
+ 
+        if(mysqli_connect_error())
+             $this->error .= "Cannot connect do Database: " + mysqli_connect_error();
+    }
+    
+    private function executeQuery($query, $params)
+    {
+         $config = Config::GetInstance();
+        $stm = null;
+        try
+        {
+            $this->newConnection();
+            self::$con->select_db($config->preferences["connection_string"]["banco"]);
+            
+            $stm = self::$con->prepare($query);
+           
+            $this->prepareQuery($stm, $params,TypeQuery::$SimpleQuery);
+
+            $stm->execute();
+            
+            $this->error = $stm->error;
+            
+            return $stm;
+            
+        }catch(mysqli_sql_exception $e)
+        {
+          $this->error .= $e->getMessgae();
+          $stm->close();
+        }
+    }
+    
+    public function executerQueryResult($query, $params = null)
+    {
+        $sucess = $this->executeQuery($query, $params);
+        
+        return  $sucess->get_result();
+        
+    }
+    
+    public function executeQueryEscalar($query,$params)
+    {
+        $result = $this->executeQuery($query,$params);
+        
+        $row = null;   
+
+        $row = $result->fetch_array(MYSQLI_ASSOC);
+        
+        return boolval($row["retorno"]);
+    }
+    
+    public function executeQueryNoResult($query,$params = null)
+    {
+        $result = $this->executeQuery($query,$params);
+       
+        
+        return ($result->errno == 0);
+    }
+    
+    public function executeQueryMultiResult($query,$params)
+    {
+        $dataSet = array();
+        try
+        {
+            $this->newConnection();
+            
+            $this->con->multi_query(prepareQuery($params, $query, TypeQuery::StoreProcedure));
+            
+            $i = 0;
+            
+            do
+            {     
+                $dataSet[$i++] = $this->con->store_result();
+                
+            }while($this->con->next_result());
+            
+            $this->closeConnection();
+            
+            return $dataSet;
+        }catch(mysqli_sql_exception $e)
+        {
+            echo $e;
+        }
+    }
+    
+    /**
+     * @params a - Parametros da query que serão colocadas na query. Exemplo: array("tipos"=> array(), valor1, valor2, valor3)
+     */
+    public function prepareQuery( $stm = null, $params = null, $tipoQuery = null)
+    {
+        if($tipoQuery == TypeQuery::$SimpleQuery)
+        {
+            
+           if($stm != null)
+           {
+               
+               if( $params != null  && count($params) > 0)
+               {
+                    $bind_parameters = array();
+
+                    $bind_parameters[] = &$params["tipos"];
+                   
+                    for( $i = 0; $i < count($params) - 1 ; $i++) 
+                    {
+                        $bind_parameters[] = &$params[$i];
+                    }
+                    
+                   
+                    
+                    call_user_func_array(array($stm,"bind_param"), $bind_parameters);
+                    
+               }
+           }
+        }
+    }
+    
+    public function typeValueBD($value)
+    {
+        switch (gettype($value))
+        {
+            case "boolean":
+            case "integer":
+                return "i";
+            case "double":
+                return "d";
+            case "string":
+                return "s";
+        }
+    }
+    
+    public function closeConnection()
+    {
+        if(is_resource(self::$con))
+        {
+            self::$con->close();
+        }
+        self::$con = null;
+    }
+}

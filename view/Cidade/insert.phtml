@@ -1,0 +1,21 @@
+
+<form class="form-horizontal" action ="?url=Cidade/Create" method="post" >
+    
+    <div class="form-group">
+        <label class="col-xs-3 col-sm-2 col-md-2">Nome Cidade:</label>
+        <div class="  col-xs-9 col-sm-5 col-md-5">
+            <input type="text" class="form-control" name="Nome" placeholder="Digite o nome da Cidade">
+        </div>
+    </div> 
+    <!--<input type="submit" value="Inserir"/>-->
+    <?php echo Bootstrap::ButtonSubmit("btn-success","btnConfirmar","Confirmar");?>
+
+       
+</form>
+
+<?php 
+    $view = $_SESSION["View"];
+    
+    echo $view->Mensagem;
+
+?>

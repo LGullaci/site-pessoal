@@ -1,0 +1,161 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of DAOUsuario
+ *
+ * @author Lucas
+ */
+class DAOUsuario extends DAO {
+    //put your code here
+    
+    public function __construct(){
+        
+    }
+    
+    public function validarUsuario($dadosLogin)
+    {
+        $params = array("tipo" => $this->typeValueBD($dadosLogin["login"]));
+        $params[] = $dadosLogin["login"];
+        $query = 'call procUsuarioSeleciona(?,null)';
+        
+        $validado = false;
+        try
+        {
+            $dataSet = $this->executerQueryMultResult($query,$params);
+            
+            if(count($dataSet) == 0)
+            {
+                $validado = false;
+            }
+            else
+            {
+                $dadosUsuario = $dataSet[0];
+                
+                $validado = ($dadosUsuario['strSenha'] == $dadosLogin['senha']);
+            }
+            
+        } catch (Exception $ex) {
+            $validado = false;
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function cadastrarUsuario($dadosUsuario)
+    {
+          $params = array("tipo" => $this->typeValueBD($dadosUsuario));
+        $params[] = $dadosLogin;
+        $query = 'call procUsuarioCadastrar(?)';
+        
+        $validado = false;
+        try
+        {
+            $result = $this->executerQueryResult($query,$params);
+            
+            if($result === false)
+            {
+                if($row = $result->fecth(MYSQLI_ASSOC))
+                {
+                   $json = json_decode($row['retorno'],true);
+                   
+                   $validado = ($json["resultCode"] == "0");
+                }
+            }
+            
+            
+        } catch (Exception $ex) {
+            $validado = false;
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function alterarUsuario($dadosUsuario)
+    {
+        $params = array("tipo" => $this->typeValueBD($dadosUsuario));
+        $params[] = $dadosLogin;
+        $query = 'call procUsuarioAlterar(?)';
+        
+        $validado = false;
+        try
+        {
+            $result = $this->executerQueryResult($query,$params);
+            
+            if($result === false)
+            {
+                if($row = $result->fecth(MYSQLI_ASSOC))
+                {
+                   $json = json_decode($row['retorno'],true);
+                   
+                   $validado = ($json["resultCode"] == "0");
+                }
+            }
+            
+        } catch (Exception $ex) {
+            $validado = false;
+            $this->error = $ex->getMessage();
+        }
+        
+        return $validado;
+    }
+    
+    public function selecionarUsuario($idUsuario = -1, $login = '') {
+        $params = array("tipo" => typeValueBD($idUsuario));
+        $params["tipo"] = typeValueBD($login);
+        $params[] = $idUsuario;
+        $params[] = $login;
+        
+        $to = new TransferObject();
+        
+        $query = 'call procUsuarioSelecionar(?,?);';
+        
+        try {
+            $result = $this->executerMultiQueryResult($query,$params);
+            
+            if($result !== false) {
+                $r = $result[0];
+                if($row = $r->fetch_array(MYSQLI_ASSOC)){
+                 
+                    $to->idUsuario = $row['idUsuario'];
+                    $to->idCliente = $row["idCliente"];
+                    $to->login = $row["strLogin"];
+                    $to->senha = $row["strSenha"];
+                }
+                
+                $r = $result[1];
+                $demos = array();
+                while($row = $r->fetch_array(MYSQL_ASSOC)){
+                    
+                    $demos[] = $row["idSolucao"];
+                }
+                
+                $to->demonstracoes = $demos;
+            }
+        
+        } catch (Exception $ex) {
+           $this->error = $ex->getMessage();
+        }
+    }
+    
+    public function listarUsuarios() {
+        $query = 'call procListaUsuarios();';
+        
+        try {
+            
+            return $this->executerQueryResult($query)->fetch_array(MYSQLI_ASSOC);
+            
+        } catch (Exception $ex) {
+            $this->error = $ex->getMessage();
+            return null;
+        }
+    }
+        
+}

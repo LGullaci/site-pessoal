@@ -1,0 +1,51 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of CidadeDAO
+ *
+ * @author Lucas
+ */
+class CidadeDAO extends DAO{
+    
+    
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    public function insert($dados)
+    {
+        $query = "insert into Cidades(nome)";
+        $valuesInsert = "values ( '{$dados->nome}')";        
+        
+        return $this->executeQueryNoResult($query . " " . $valuesInsert);
+        
+        
+    }
+    
+    public function update($dados)
+    {
+        $query = "update cidades set nome = '{$dados->nome}' where id = {$dados->id}";
+        
+        return $this->executeQueryNoResult($query);
+    }
+    
+    public function listarCidades()
+    {
+        return $this->executerQueryResult("select * from cidades");
+    }
+    
+    public function buscarCidade($idCidade)
+    {
+        $params = array("tipos" => "".$this->typeValueBD($idCidade));
+        $params[] = $idCidade;
+        return $this->executerQueryResult("select * from cidades where id = ? ",$params);
+        
+    }
+    
+}
